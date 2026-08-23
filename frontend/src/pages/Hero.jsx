@@ -35,7 +35,7 @@ const Hero = () => {
           </div>
           <div className="col-lg-6 text-center">
             <img
-              src="https://images.pexels.com/photos/356056/pexels-photo-356056.jpeg?auto=compress&cs=tinysrgb&w=600"
+              src="https://images.pexels.com/photos/129205/pexels-photo-129205.jpeg"
               alt="Tech Products"
               className="img-fluid rounded-3 shadow-lg"
               style={{ maxHeight: "400px", objectFit: "cover" }}
