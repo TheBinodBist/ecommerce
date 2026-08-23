@@ -5,13 +5,16 @@ import "./index.css";
 
 import CartProvider from "./Provider/CartProvider.jsx";
 import AuthProvider from "./Provider/AuthProvider.jsx";
+import ErrorBoundary from "./ErrorBoundary.jsx";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <AuthProvider>
       <CartProvider>
-        <App />
+        <ErrorBoundary>
+          <App />
+        </ErrorBoundary>
       </CartProvider>
     </AuthProvider>
-  </StrictMode>
+  </StrictMode>,
 );

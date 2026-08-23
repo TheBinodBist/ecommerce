@@ -58,7 +58,7 @@ const Cart = () => {
   };
 
   // Empty State UI
-  if (!state.loading && state.items.length === 0) {
+  if (!state.loading && state?.items?.length === 0) {
     return (
       <>
         <div className="container py-5" style={{ minHeight: "80vh" }}>

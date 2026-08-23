@@ -16,9 +16,6 @@ const Register = () => {
 
   const navigate = useNavigate();
 
-  /* ===============================
-     HANDLE INPUT CHANGE
-  =============================== */
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
@@ -27,9 +24,7 @@ const Register = () => {
     }));
   };
 
-  /* ===============================
-     HANDLE FORM SUBMIT
-  =============================== */
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
@@ -59,7 +54,6 @@ const Register = () => {
     setIsLoading(true);
 
     try {
-      // ONLY send backend-required fields
       const payload = {
         username: formData.username,
         email: formData.email,

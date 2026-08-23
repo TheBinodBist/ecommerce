@@ -3,7 +3,7 @@ import { useCart } from "../context/CartContext";
 import { useAxios } from "../hooks/useAxios";
 import Hero from "./Hero";
 import Products from "./Products";
-
+import { useAuth } from "../context/index";
 export const Home = () => {
   const { dispatch } = useCart();
   const { auth } = useAuth();
