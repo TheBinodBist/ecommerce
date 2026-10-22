@@ -1,7 +1,9 @@
 import { LayoutDashboard, LogOut, Package } from "lucide-react";
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
+import { Col, Nav, Button } from "react-bootstrap";
 import { useCart } from "../context/CartContext";
 import useAuth from "../hooks/useAuth";
+import "../styles/ui.css";
 
 const Sidebar = () => {
   const location = useLocation();
@@ -34,37 +36,41 @@ const Sidebar = () => {
   };
 
   return (
-    <aside className="col-lg-3 mb-4">
-      <div className="card border-0 shadow-sm p-3">
-        <nav className="nav flex-column gap-2">
+    <Col as="aside" lg={3} className="mb-4">
+      <div className="ui-side sticky-top" style={{ top: "90px" }}>
+        <div
+          className="ui-eyebrow px-3 pt-2 pb-3"
+          style={{ color: "rgba(255,255,255,.45)" }}
+        >
+          My account
+        </div>
+
+        <Nav className="flex-column gap-1">
           {menuItems.map((item) => (
             <NavLink
               key={item.path}
               to={item.path}
               end={item.path === "/dashboard"}
               className={({ isActive }) =>
-                `nav-link rounded d-flex align-items-center ${
-                  isActive ? "bg-primary text-white shadow-sm" : "text-dark"
-                }`
+                `ui-side-link ${isActive ? "active" : ""}`
               }
-              style={{ cursor: "pointer", transition: "0.2s" }}
             >
-              <item.icon size={18} className="me-2" /> {item.label}
+              <item.icon size={18} /> {item.label}
             </NavLink>
           ))}
+        </Nav>
 
-          <hr />
+        <div className="ui-divider-dark my-3" />
 
-          <button
-            className="nav-link text-danger border-0 bg-transparent d-flex align-items-center"
-            style={{ cursor: "pointer" }}
-            onClick={() => handleLogout()}
-          >
-            <LogOut size={18} className="me-2" /> Logout
-          </button>
-        </nav>
+        <Button
+          variant="link"
+          className="ui-side-link danger w-100 text-start"
+          onClick={() => handleLogout()}
+        >
+          <LogOut size={18} /> Logout
+        </Button>
       </div>
-    </aside>
+    </Col>
   );
 };
 

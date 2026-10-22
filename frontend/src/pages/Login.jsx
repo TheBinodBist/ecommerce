@@ -1,7 +1,9 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { Row, Col, Form, Button, Alert, Spinner } from "react-bootstrap";
 import { api } from "../api";
 import useAuth from "../hooks/useAuth";
+import "../styles/ui.css";
 
 const Login = () => {
   const [formData, setFormData] = useState({
@@ -32,7 +34,8 @@ const Login = () => {
 
     setIsLoading(true);
     try {
-      const response = await api.post("/token/", { // User login (get access token)
+      const response = await api.post("/token/", {
+        // User login (get access token)
         email: formData.email,
         password: formData.password,
       });
@@ -67,95 +70,114 @@ const Login = () => {
   };
 
   return (
-    <div className="auth-container">
-      <div className="container">
-        <div className="row justify-content-center">
-          <div className="col-md-6 col-lg-4">
-            <div className="card auth-card">
-              <div className="card-body ">
-                <div className="text-center mb-4">
-                  <h2 className="text-gradient fw-bold">Welcome Back</h2>
-                  <p className="text-muted">Sign in to your account</p>
-                </div>
-
-                {error && (
-                  <div className="alert alert-danger" role="alert">
-                    {error}
-                  </div>
-                )}
-
-                <form onSubmit={handleSubmit}>
-                  <div className="mb-3">
-                    <label htmlFor="email" className="form-label fw-semibold">
-                      Email
-                    </label>
-                    <input
-                      type="text"
-                      className="form-control"
-                      id="email"
-                      name="email"
-                      value={formData.email}
-                      onChange={handleChange}
-                      placeholder="Enter your email"
-                      required
-                    />
-                  </div>
-
-                  <div className="mb-4">
-                    <label
-                      htmlFor="password"
-                      className="form-label fw-semibold"
-                    >
-                      Password
-                    </label>
-                    <input
-                      type="password"
-                      className="form-control"
-                      id="password"
-                      name="password"
-                      value={formData.password}
-                      onChange={handleChange}
-                      placeholder="Enter your password"
-                      required
-                    />
-                  </div>
-
-                  <button
-                    type="submit"
-                    className="btn btn-primary w-100 mb-3"
-                    disabled={isLoading}
-                  >
-                    {isLoading ? (
-                      <>
-                        <span
-                          className="spinner-border spinner-border-sm me-2"
-                          role="status"
-                          aria-hidden="true"
-                        ></span>
-                        Signing In...
-                      </>
-                    ) : (
-                      "Sign In"
-                    )}
-                  </button>
-                </form>
-
-                <div className="text-center">
-                  <p className="mb-0 text-muted">
-                    Don't have an account?{" "}
-                    <Link
-                      to="/signup"
-                      className="text-decoration-none fw-semibold"
-                    >
-                      Sign up here
-                    </Link>
-                  </p>
-                </div>
-              </div>
-            </div>
+    <div className="ui-auth">
+      <Row className="g-0 min-vh-100">
+        {/* Brand panel */}
+        <Col
+          lg={5}
+          className="ui-auth-aside d-none d-lg-flex flex-column justify-content-between p-5"
+        >
+          <div className="ui-eyebrow" style={{ color: "rgba(255,255,255,.6)" }}>
+            Members
           </div>
-        </div>
-      </div>
+          <div style={{ position: "relative", zIndex: 1 }}>
+            <h1
+              className="display-4 fw-bold mb-3"
+              style={{ letterSpacing: "-0.03em" }}
+            >
+              Good to
+              <br />
+              see you again.
+            </h1>
+            <p
+              className="fs-5 mb-0"
+              style={{ color: "rgba(255,255,255,.65)", maxWidth: 360 }}
+            >
+              Pick up where you left off — your cart and orders are waiting.
+            </p>
+          </div>
+          <div />
+        </Col>
+
+        {/* Form */}
+        <Col
+          lg={7}
+          className="d-flex align-items-center justify-content-center p-4"
+        >
+          <div className="w-100" style={{ maxWidth: 420 }}>
+            <div className="ui-eyebrow mb-2">Sign in</div>
+            <h2 className="ui-title display-6 mb-1">Welcome back</h2>
+            <p className="ui-muted mb-4">Sign in to your account</p>
+
+            {error && (
+              <Alert variant="danger" className="border-0 rounded-4">
+                {error}
+              </Alert>
+            )}
+
+            <Form onSubmit={handleSubmit}>
+              <Form.Group className="mb-3" controlId="email">
+                <Form.Label className="ui-eyebrow">Email</Form.Label>
+                <Form.Control
+                  type="text"
+                  className="ui-input"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  placeholder="Enter your email"
+                  required
+                />
+              </Form.Group>
+
+              <Form.Group className="mb-4" controlId="password">
+                <Form.Label className="ui-eyebrow">Password</Form.Label>
+                <Form.Control
+                  type="password"
+                  className="ui-input"
+                  name="password"
+                  value={formData.password}
+                  onChange={handleChange}
+                  placeholder="Enter your password"
+                  required
+                />
+              </Form.Group>
+
+              <Button
+                type="submit"
+                className="btn-ink w-100 py-3 mb-4"
+                disabled={isLoading}
+              >
+                {isLoading ? (
+                  <>
+                    <Spinner
+                      as="span"
+                      animation="border"
+                      size="sm"
+                      role="status"
+                      aria-hidden="true"
+                      className="me-2"
+                    />
+                    Signing In...
+                  </>
+                ) : (
+                  "Sign In"
+                )}
+              </Button>
+            </Form>
+
+            <p className="mb-0 ui-muted text-center">
+              Don't have an account?{" "}
+              <Link
+                to="/signup"
+                className="fw-bold text-decoration-none"
+                style={{ color: "var(--ui-accent-dark)" }}
+              >
+                Sign up here
+              </Link>
+            </p>
+          </div>
+        </Col>
+      </Row>
     </div>
   );
 };

@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { Row, Col, Form, Button, Alert } from "react-bootstrap";
 import { api } from "../api";
+import "../styles/ui.css";
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -23,7 +25,6 @@ const Register = () => {
       [name]: value,
     }));
   };
-
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -85,111 +86,138 @@ const Register = () => {
   };
 
   return (
-    <div className="auth-container">
-      <div className="container">
-        <div className="row justify-content-center">
-          <div className="col-md-6 col-lg-5">
-            <div className="card auth-card">
-              <div className="card-body">
-                <div className="text-center mb-4">
-                  <h2 className="fw-bold">Create Account</h2>
-                </div>
-
-                {error && (
-                  <div className="alert alert-danger" role="alert">
-                    {error}
-                  </div>
-                )}
-
-                {success && (
-                  <div className="alert alert-success" role="alert">
-                    {success}
-                  </div>
-                )}
-
-                <form onSubmit={handleSubmit} noValidate>
-                  {/* USERNAME */}
-                  <div className="mb-3">
-                    <label className="form-label fw-semibold">Username</label>
-                    <input
-                      type="text"
-                      className="form-control"
-                      name="username"
-                      value={formData.username}
-                      onChange={handleChange}
-                      placeholder="Enter username"
-                      required
-                    />
-                  </div>
-
-                  {/* EMAIL */}
-                  <div className="mb-3">
-                    <label className="form-label fw-semibold">
-                      Email Address
-                    </label>
-                    <input
-                      type="email"
-                      className="form-control"
-                      name="email"
-                      value={formData.email}
-                      onChange={handleChange}
-                      placeholder="Enter email"
-                      required
-                    />
-                  </div>
-
-                  {/* PASSWORD */}
-                  <div className="mb-3">
-                    <label className="form-label fw-semibold">Password</label>
-                    <input
-                      type="password"
-                      className="form-control"
-                      name="password"
-                      value={formData.password}
-                      onChange={handleChange}
-                      placeholder="Create password"
-                      required
-                    />
-                  </div>
-
-                  {/* CONFIRM PASSWORD (Frontend Only) */}
-                  <div className="mb-4">
-                    <label className="form-label fw-semibold">
-                      Confirm Password
-                    </label>
-                    <input
-                      type="password"
-                      className="form-control"
-                      name="confirmPassword"
-                      value={formData.confirmPassword}
-                      onChange={handleChange}
-                      placeholder="Confirm password"
-                      required
-                    />
-                  </div>
-
-                  <button
-                    type="submit"
-                    className="btn btn-primary w-100"
-                    disabled={isLoading}
-                  >
-                    {isLoading ? "Creating Account..." : "Create Account"}
-                  </button>
-                </form>
-
-                <div className="text-center mt-3">
-                  <p className="mb-0 text-muted">
-                    Already have an account?{" "}
-                    <Link to="/login" className="fw-semibold">
-                      Sign in
-                    </Link>
-                  </p>
-                </div>
-              </div>
-            </div>
+    <div className="ui-auth">
+      <Row className="g-0 min-vh-100 flex-lg-row-reverse">
+        {/* Brand panel (right on desktop) */}
+        <Col
+          lg={5}
+          className="ui-auth-aside d-none d-lg-flex flex-column justify-content-between p-5"
+        >
+          <div className="ui-eyebrow" style={{ color: "rgba(255,255,255,.6)" }}>
+            New here
           </div>
-        </div>
-      </div>
+          <div style={{ position: "relative", zIndex: 1 }}>
+            <h1
+              className="display-4 fw-bold mb-3"
+              style={{ letterSpacing: "-0.03em" }}
+            >
+              Start your
+              <br />
+              first order.
+            </h1>
+            <p
+              className="fs-5 mb-0"
+              style={{ color: "rgba(255,255,255,.65)", maxWidth: 360 }}
+            >
+              Create an account to save your cart and track every purchase.
+            </p>
+          </div>
+          <div />
+        </Col>
+
+        {/* Form */}
+        <Col
+          lg={7}
+          className="d-flex align-items-center justify-content-center p-4"
+        >
+          <div className="w-100" style={{ maxWidth: 480 }}>
+            <div className="ui-eyebrow mb-2">Sign up</div>
+            <h2 className="ui-title display-6 mb-4">Create Account</h2>
+
+            {error && (
+              <Alert variant="danger" className="border-0 rounded-4">
+                {error}
+              </Alert>
+            )}
+            {success && (
+              <Alert variant="success" className="border-0 rounded-4">
+                {success}
+              </Alert>
+            )}
+
+            <Form onSubmit={handleSubmit} noValidate>
+              <Row className="g-3 mb-4">
+                {/* USERNAME */}
+                <Col md={6}>
+                  <Form.Label className="ui-eyebrow">Username</Form.Label>
+                  <Form.Control
+                    type="text"
+                    className="ui-input"
+                    name="username"
+                    value={formData.username}
+                    onChange={handleChange}
+                    placeholder="Enter username"
+                    required
+                  />
+                </Col>
+
+                {/* EMAIL */}
+                <Col md={6}>
+                  <Form.Label className="ui-eyebrow">Email Address</Form.Label>
+                  <Form.Control
+                    type="email"
+                    className="ui-input"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleChange}
+                    placeholder="Enter email"
+                    required
+                  />
+                </Col>
+
+                {/* PASSWORD */}
+                <Col md={6}>
+                  <Form.Label className="ui-eyebrow">Password</Form.Label>
+                  <Form.Control
+                    type="password"
+                    className="ui-input"
+                    name="password"
+                    value={formData.password}
+                    onChange={handleChange}
+                    placeholder="Create password"
+                    required
+                  />
+                </Col>
+
+                {/* CONFIRM PASSWORD (Frontend Only) */}
+                <Col md={6}>
+                  <Form.Label className="ui-eyebrow">
+                    Confirm Password
+                  </Form.Label>
+                  <Form.Control
+                    type="password"
+                    className="ui-input"
+                    name="confirmPassword"
+                    value={formData.confirmPassword}
+                    onChange={handleChange}
+                    placeholder="Confirm password"
+                    required
+                  />
+                </Col>
+              </Row>
+
+              <Button
+                type="submit"
+                className="btn-accent w-100 py-3"
+                disabled={isLoading}
+              >
+                {isLoading ? "Creating Account..." : "Create Account"}
+              </Button>
+            </Form>
+
+            <p className="mt-4 mb-0 ui-muted text-center">
+              Already have an account?{" "}
+              <Link
+                to="/login"
+                className="fw-bold text-decoration-none"
+                style={{ color: "var(--ui-ink)" }}
+              >
+                Sign in
+              </Link>
+            </p>
+          </div>
+        </Col>
+      </Row>
     </div>
   );
 };

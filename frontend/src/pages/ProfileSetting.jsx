@@ -1,5 +1,7 @@
 import { Save, User } from "lucide-react";
 import { useState } from "react";
+import { Row, Col, Nav, Form, Button, Alert, Spinner } from "react-bootstrap";
+import "../styles/ui.css";
 
 const ProfileSettings = () => {
   const [activeTab, setActiveTab] = useState("profile");
@@ -35,65 +37,69 @@ const ProfileSettings = () => {
   };
 
   return (
-    <div className="col-lg-9 mt-4">
-      <div className="row justify-content-center">
-        <div className="col-lg-8">
-          {/* Header */}
-          <div className="mb-4">
-            <h2 className="mb-1">Profile Settings</h2>
-            <p className="text-muted">
-              Manage your account information
-            </p>
+    <Col lg={9} className="mt-4">
+      <Row className="justify-content-center">
+        <Col xl={9}>
+          {/* Header with avatar */}
+          <div className="d-flex align-items-center gap-3 mb-4">
+            <div className="ui-avatar">
+              {(profileData.name || "U").charAt(0).toUpperCase()}
+            </div>
+            <div>
+              <div className="ui-eyebrow">Settings</div>
+              <h2 className="ui-title mb-0">Profile Settings</h2>
+              <small className="ui-muted">
+                Manage your account information
+              </small>
+            </div>
           </div>
 
           {/* Alerts */}
           {alerts && (
-            <div
-              className={`alert alert-${alerts.type} alert-dismissible fade show`}
-              role="alert"
+            <Alert
+              variant={alerts.type}
+              dismissible
+              onClose={() => setAlerts(null)}
+              className="border-0 rounded-4"
             >
               {alerts.message}
-              <button
-                type="button"
-                className="btn-close"
-                onClick={() => setAlerts(null)}
-              ></button>
-            </div>
+            </Alert>
           )}
 
-          {/* Card */}
-          <div className="card">
-            <div className="card-header">
-              <ul className="nav nav-tabs card-header-tabs" role="tablist">
-                <li className="nav-item">
-                  <button
-                    className={`nav-link ${
-                      activeTab === "profile" ? "active" : ""
-                    }`}
-                    onClick={() => setActiveTab("profile")}
-                  >
-                    <User size={18} className="me-2" />
-                    Profile Information
-                  </button>
-                </li>
-              </ul>
-            </div>
+          {/* Tabs as pills */}
+          <Nav variant="pills" className="mb-3 gap-2">
+            <Nav.Item>
+              <Nav.Link
+                active={activeTab === "profile"}
+                onClick={() => setActiveTab("profile")}
+                className="rounded-pill px-4 fw-semibold"
+                style={
+                  activeTab === "profile"
+                    ? { background: "var(--ui-ink)", color: "#fff" }
+                    : { color: "var(--ui-ink)" }
+                }
+              >
+                <User size={16} className="me-2" />
+                Profile Information
+              </Nav.Link>
+            </Nav.Item>
+          </Nav>
 
-            <div className="card-body">
-              {/* Profile Tab */}
-              {activeTab === "profile" && (
-                <div>
-                  <h5 className="mb-3">Personal Information</h5>
-                  <form onSubmit={handleProfileSubmit}>
-                    <div className="row">
-                      <div className="col-md-6 mb-3">
-                        <label htmlFor="name" className="form-label">
+          <div className="ui-card p-4 p-md-5">
+            {/* Profile Tab */}
+            {activeTab === "profile" && (
+              <div>
+                <h5 className="ui-title mb-4">Personal Information</h5>
+                <Form onSubmit={handleProfileSubmit}>
+                  <Row className="g-3 mb-3">
+                    <Col md={6}>
+                      <Form.Group controlId="name">
+                        <Form.Label className="ui-eyebrow">
                           Full Name
-                        </label>
-                        <input
+                        </Form.Label>
+                        <Form.Control
                           type="text"
-                          className="form-control"
-                          id="name"
+                          className="ui-input"
                           value={profileData.name}
                           onChange={(e) =>
                             setProfileData((prev) => ({
@@ -103,16 +109,17 @@ const ProfileSettings = () => {
                           }
                           required
                         />
-                      </div>
+                      </Form.Group>
+                    </Col>
 
-                      <div className="col-md-6 mb-3">
-                        <label htmlFor="email" className="form-label">
+                    <Col md={6}>
+                      <Form.Group controlId="email">
+                        <Form.Label className="ui-eyebrow">
                           Email Address
-                        </label>
-                        <input
+                        </Form.Label>
+                        <Form.Control
                           type="email"
-                          className="form-control"
-                          id="email"
+                          className="ui-input"
                           value={profileData.email}
                           onChange={(e) =>
                             setProfileData((prev) => ({
@@ -122,41 +129,48 @@ const ProfileSettings = () => {
                           }
                           required
                         />
-                      </div>
-                    </div>
+                      </Form.Group>
+                    </Col>
 
-                    <div className="mb-4">
-                      <label htmlFor="phone" className="form-label">
-                        Phone Number
-                      </label>
-                      <input
-                        type="tel"
-                        className="form-control"
-                        id="phone"
-                        value={profileData.phone}
-                        onChange={(e) =>
-                          setProfileData((prev) => ({
-                            ...prev,
-                            phone: e.target.value,
-                          }))
-                        }
-                        placeholder="+1 (555) 123-4567"
-                      />
-                    </div>
+                    <Col xs={12}>
+                      <Form.Group controlId="phone">
+                        <Form.Label className="ui-eyebrow">
+                          Phone Number
+                        </Form.Label>
+                        <Form.Control
+                          type="tel"
+                          className="ui-input"
+                          value={profileData.phone}
+                          onChange={(e) =>
+                            setProfileData((prev) => ({
+                              ...prev,
+                              phone: e.target.value,
+                            }))
+                          }
+                          placeholder="+1 (555) 123-4567"
+                        />
+                      </Form.Group>
+                    </Col>
+                  </Row>
 
-                    <button
+                  <div className="ui-dashed my-4" />
+
+                  <div className="text-end">
+                    <Button
                       type="submit"
-                      className="btn btn-primary"
+                      className="btn-accent px-4"
                       disabled={isLoading}
                     >
                       {isLoading ? (
                         <>
-                          <div
-                            className="spinner-border spinner-border-sm me-2"
+                          <Spinner
+                            animation="border"
+                            size="sm"
                             role="status"
+                            className="me-2"
                           >
                             <span className="visually-hidden">Loading...</span>
-                          </div>
+                          </Spinner>
                           Updating...
                         </>
                       ) : (
@@ -165,15 +179,15 @@ const ProfileSettings = () => {
                           Update Profile
                         </>
                       )}
-                    </button>
-                  </form>
-                </div>
-              )}
-            </div>
+                    </Button>
+                  </div>
+                </Form>
+              </div>
+            )}
           </div>
-        </div>
-      </div>
-    </div>
+        </Col>
+      </Row>
+    </Col>
   );
 };
 

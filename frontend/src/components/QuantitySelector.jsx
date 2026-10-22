@@ -1,7 +1,11 @@
+import { Button, Form } from "react-bootstrap";
+import { Minus, Plus } from "lucide-react";
+import "../styles/ui.css";
+
 const QuantitySelector = ({
   quantity,
   onQuantityChange,
-  min = 0, 
+  min = 0,
   max = 99,
 }) => {
   const handleDecrement = () => {
@@ -24,32 +28,33 @@ const QuantitySelector = ({
   };
 
   return (
-    <div className="quantity-selector d-flex align-items-center">
-      <button
-        type="button"
-        className="btn btn-sm btn-outline-secondary"
+    <div className="ui-qty">
+      <Button
+        variant="light"
+        className="ui-qty-btn"
         onClick={handleDecrement}
         disabled={quantity <= 0}
+        aria-label="Decrease quantity"
       >
-        <i className="bi bi-dash"></i>
-      </button>
+        <Minus size={14} />
+      </Button>
 
-      <input
+      <Form.Control
         type="number"
-        className="form-control text-center mx-2"
-        style={{ width: "60px", height: "32px" }}
+        className="ui-qty-input p-0 shadow-none"
         value={quantity}
         onChange={handleInputChange}
       />
 
-      <button
-        type="button"
-        className="btn btn-sm btn-outline-secondary"
+      <Button
+        variant="light"
+        className="ui-qty-btn"
         onClick={handleIncrement}
         disabled={quantity >= max}
+        aria-label="Increase quantity"
       >
-        <i className="bi bi-plus"></i>
-      </button>
+        <Plus size={14} />
+      </Button>
     </div>
   );
 };

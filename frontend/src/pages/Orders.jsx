@@ -7,9 +7,11 @@ import {
   Package,
 } from "lucide-react";
 import { useEffect, useState } from "react";
+import { Col, Row, Button, Spinner } from "react-bootstrap";
 import useAuth from "../hooks/useAuth";
 import { useAxios } from "../hooks/useAxios";
 import OrderDetail from "../components/OrderDetail";
+import "../styles/ui.css";
 
 const Orders = () => {
   const [orders, setOrders] = useState([]);
@@ -18,15 +20,14 @@ const Orders = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleOpenModal = (orderId) => {
-  setSelectedOrder(orderId);
-  setIsModalOpen(true);
+    setSelectedOrder(orderId);
+    setIsModalOpen(true);
   };
-  
+
   const handleCloseModal = () => {
     setIsModalOpen(false);
     setSelectedOrder(null);
   };
-  
 
   const { api } = useAxios();
   const { auth } = useAuth();
@@ -84,99 +85,102 @@ const Orders = () => {
   };
 
   return (
-    <div className="col-lg-9 py-4 px-md-4">
+    <Col lg={9} className="py-4 px-md-4">
       <div className="mb-4">
-        <h2 className="fw-bold mb-1 text-dark">Purchase History</h2>
-        <p className="text-muted">
+        <div className="ui-eyebrow mb-1">Account</div>
+        <h2 className="ui-title mb-1">Purchase History</h2>
+        <p className="ui-muted mb-0">
           A detailed list of all your previous orders.
         </p>
       </div>
 
-      <div className="d-grid gap-3">
+      <div className="ui-card overflow-hidden">
         {loading ? (
           <div className="text-center py-5">
-            <div className="spinner-border text-primary" role="status"></div>
+            <Spinner animation="grow" style={{ color: "var(--ui-accent)" }} />
           </div>
         ) : orders.length > 0 ? (
-          orders.map((order) => {
+          orders.map((order, index) => {
             const config = getStatusConfig(order.status);
             return (
-              <div
+              <Row
                 key={order.id}
-                className="card border-0 shadow-sm transition-hover"
+                className="ui-row g-0 align-items-center px-3 px-md-4 py-3 mx-0"
                 style={{
-                  borderLeft: `6px solid ${config.accent}`,
-                  borderRadius: "12px",
+                  borderTop: index === 0 ? "none" : "1px solid var(--ui-line)",
                 }}
               >
-                <div className="card-body p-4">
-                  <div className="row align-items-center">
-                    <div className="col-md-3">
-                      <h6 className="text-primary fw-bold mb-1">
-                        #{order.id}
-                      </h6>
-                      <span className="text-muted small">
-                        {new Date(order.created_at).toLocaleDateString("en-GB")}
-                      </span>
-                    </div>
-
-                    <div className="col-md-4 py-3 py-md-0">
-                      <div className="d-flex align-items-center gap-4">
-                        <div>
-                          <small className="text-muted d-block">
-                            Total Amount
-                          </small>
-                          <span className="fw-bold fs-5">
-                            ${order.grand_total}
-                          </span>
-                        </div>
-                        <div className="text-muted small">
-                          <small className="d-block">Tax</small>
-                          <span>${order.tax_amount}</span>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="col-md-2 mb-3 mb-md-0">
-                      <span
-                        className="badge d-inline-flex align-items-center gap-2 px-3 py-2 rounded-pill"
-                        style={{
-                          backgroundColor: config.bg,
-                          color: config.text,
-                          border: `1px solid ${config.border}`,
-                          fontWeight: "600",
-                        }}
-                      >
-                        {config.icon} {order.status}
-                      </span>
-                    </div>
-
-                    <div className="col-md-3">
-                      <div className="d-flex gap-2 justify-content-md-end">
-                        <button className="btn btn-primary roidunded-pill px-3 py-2 d-flex align-items-center gap-2 shadow-sm" onClick={() => handleOpenModal(order?.id)}>
-                          <Eye size={16} /> Details
-                        </button>
-                       
-                      </div>
-                    </div>
+                {/* Icon + id */}
+                <Col
+                  xs={12}
+                  md={4}
+                  className="d-flex align-items-center gap-3 mb-2 mb-md-0"
+                >
+                  <span
+                    className="d-inline-grid flex-shrink-0"
+                    style={{
+                      width: 42,
+                      height: 42,
+                      borderRadius: 14,
+                      display: "grid",
+                      placeItems: "center",
+                      background: config.bg,
+                      color: config.text,
+                    }}
+                  >
+                    {config.icon}
+                  </span>
+                  <div>
+                    <div className="fw-bold">#{order.id}</div>
+                    <small className="ui-muted">
+                      {new Date(order.created_at).toLocaleDateString("en-GB")}
+                    </small>
                   </div>
-                </div>
-              </div>
+                </Col>
+
+                {/* Status */}
+                <Col xs={6} md={3}>
+                  <span
+                    className="small fw-bold text-uppercase"
+                    style={{ color: config.text, letterSpacing: ".06em" }}
+                  >
+                    {order.status}
+                  </span>
+                </Col>
+
+                {/* Amount */}
+                <Col xs={6} md={3} className="text-end text-md-start">
+                  <div className="fw-bold">${order.grand_total}</div>
+                  <small className="ui-muted">Tax ${order.tax_amount}</small>
+                </Col>
+
+                {/* Action */}
+                <Col xs={12} md={2} className="text-md-end mt-2 mt-md-0">
+                  <Button
+                    className="btn-soft px-3"
+                    size="sm"
+                    onClick={() => handleOpenModal(order?.id)}
+                  >
+                    <Eye size={14} className="me-1" /> View
+                  </Button>
+                </Col>
+              </Row>
             );
           })
         ) : (
-          <div className="text-center py-5 border rounded-4 bg-white">
-            <Package size={40} className="text-muted mb-2 opacity-25" />
-            <p className="text-muted mb-0">No orders found in your account.</p>
+          <div className="text-center py-5">
+            <Package size={40} className="ui-muted mb-2 opacity-50" />
+            <p className="ui-muted mb-0">No orders found in your account.</p>
           </div>
         )}
       </div>
-      <OrderDetail 
-        orderId={selectedOrder} 
-        isOpen={isModalOpen} 
-        onClose={handleCloseModal} 
+
+      <OrderDetail
+        orderId={selectedOrder}
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
       />
-    </div>
+    </Col>
   );
 };
 

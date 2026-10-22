@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
+import { Row, Col, Button, Spinner } from "react-bootstrap";
+import { ChevronRight, Mail, User } from "lucide-react";
 import useAuth from "../hooks/useAuth";
 import { useAxios } from "../hooks/useAxios";
+import "../styles/ui.css";
 
 const DashboardHome = () => {
   const [profile, setProfile] = useState(null);
@@ -52,116 +55,125 @@ const DashboardHome = () => {
 
   if (isInitialLoading) {
     return (
-      <div
-        className="col-lg-9 d-flex justify-content-center align-items-center"
+      <Col
+        lg={9}
+        className="d-flex justify-content-center align-items-center"
         style={{ minHeight: "400px" }}
       >
         <div className="text-center">
-          <div className="spinner-border text-primary mb-2" role="status"></div>
-          <p className="text-muted small">Loading your dashboard...</p>
+          <Spinner
+            animation="grow"
+            style={{ color: "var(--ui-accent)" }}
+            className="mb-2"
+          />
+          <p className="ui-muted small">Loading your dashboard...</p>
         </div>
-      </div>
+      </Col>
     );
   }
 
   return (
-    <>
-      <main className="col-lg-9">
-        <header className="mb-4">
-          <h2 className="fw-bold">
+    <Col as="main" lg={9}>
+      {/* Hero */}
+      <header className="ui-card-dark p-4 p-md-5 mb-4 d-flex align-items-center gap-4">
+        <div
+          className="ui-avatar"
+          style={{ width: 72, height: 72, fontSize: "1.8rem" }}
+        >
+          {(profile?.username || "U").charAt(0).toUpperCase()}
+        </div>
+        <div>
+          <div className="ui-eyebrow mb-1">Dashboard</div>
+          <h2 className="fw-bold mb-1">
             Welcome back, {profile?.username || "User"}!
           </h2>
-          <p className="text-muted">
+          <p className="ui-muted mb-0">
             Manage your account and track your recent orders.
           </p>
-        </header>
+        </div>
+      </header>
 
-        {/* Profile Detail Card */}
-        <section className="card border-0 shadow-sm mb-4">
-          <div className="card-header bg-white py-3 border-bottom-0">
-            <h5 className="mb-0 fw-bold">Profile Details</h5>
-          </div>
-          <div className="card-body">
-            <div className="row g-3">
-              <div className="col-sm-6">
-                <label className="text-muted small d-block">Username</label>
-                <span className="fw-semibold">{profile?.username}</span>
-              </div>
-              <div className="col-sm-6">
-                <label className="text-muted small d-block">
-                  Email Address
-                </label>
-                <span className="fw-semibold">{profile?.email}</span>
-              </div>
+      {/* Profile tiles */}
+      <Row as="section" className="g-3 mb-4">
+        <Col sm={6}>
+          <div className="ui-card p-4 d-flex align-items-center gap-3 h-100">
+            <User size={20} style={{ color: "var(--ui-accent)" }} />
+            <div>
+              <div className="ui-eyebrow">Username</div>
+              <div className="fw-bold">{profile?.username}</div>
             </div>
           </div>
-        </section>
+        </Col>
+        <Col sm={6}>
+          <div className="ui-card p-4 d-flex align-items-center gap-3 h-100">
+            <Mail size={20} style={{ color: "var(--ui-accent)" }} />
+            <div>
+              <div className="ui-eyebrow">Email address</div>
+              <div className="fw-bold">{profile?.email}</div>
+            </div>
+          </div>
+        </Col>
+      </Row>
 
-        {/* Recent Orders Table */}
-        <section className="card border-0 shadow-sm">
-          <div className="card-header bg-white py-3 d-flex justify-content-between align-items-center border-bottom-0">
-            <h5 className="mb-0 fw-bold">Recent Orders</h5>
-            <button className="btn btn-link text-decoration-none btn-sm">
-              View All
-            </button>
+      {/* Recent Orders */}
+      <section className="ui-card overflow-hidden">
+        <div className="d-flex justify-content-between align-items-center p-4 pb-3">
+          <h5 className="ui-title mb-0">Recent orders</h5>
+          <Button size="sm" className="btn-soft px-3">
+            View All
+          </Button>
+        </div>
+
+        {ordeers.length > 0 ? (
+          ordeers.slice(0, 4).map((order) => {
+            const { color, textClass } = getStatusSettings(order.status);
+            return (
+              <div
+                key={order.id}
+                className="ui-row d-flex align-items-center gap-3 px-4 py-3"
+                style={{ borderTop: "1px solid var(--ui-line)" }}
+              >
+                <div className="flex-grow-1">
+                  <div className="fw-bold">#{order.id}</div>
+                  <small className="ui-muted">
+                    {new Date(order.created_at).toLocaleDateString()}
+                  </small>
+                </div>
+
+                <div className="d-none d-md-block text-end me-3">
+                  <small className="ui-muted d-block">
+                    Subtotal ${order.subtotal}
+                  </small>
+                  <span className="fw-bold">${order.grand_total}</span>
+                </div>
+
+                <span
+                  className={`d-inline-flex align-items-center gap-2 small fw-semibold ${textClass}`}
+                  style={{ minWidth: 110 }}
+                >
+                  <span
+                    className={`d-inline-block rounded-circle bg-${color}`}
+                    style={{ width: 8, height: 8 }}
+                  />
+                  {order.status}
+                </span>
+
+                <Button variant="light" className="btn-round">
+                  <ChevronRight size={16} />
+                </Button>
+              </div>
+            );
+          })
+        ) : (
+          <div
+            className="text-center py-5 ui-muted"
+            style={{ borderTop: "1px solid var(--ui-line)" }}
+          >
+            No orders found.
           </div>
-          <div className="table-responsive">
-            <table className="table align-middle mb-0 text-nowrap">
-              <thead className="table-light">
-                <tr>
-                  <th className="ps-4">Order ID</th>
-                  <th>Date</th>
-                  <th>Subtotal</th>
-                  <th>Total (Inc. Tax)</th>
-                  <th>Status</th>
-                  <th className="text-end pe-4">Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                {ordeers.length > 0 ? (
-                  ordeers.slice(0, 4).map((order) => {
-                    const { color, textClass } = getStatusSettings(
-                      order.status
-                    );
-                    return (
-                      <tr key={order.id}>
-                        <td className="ps-4 text-primary fw-medium">
-                          #{order.id}
-                        </td>
-                        <td>
-                          {new Date(order.created_at).toLocaleDateString()}
-                        </td>
-                        <td>${order.subtotal}</td>
-                        <td className="fw-bold">${order.grand_total}</td>
-                        <td>
-                          <span
-                            className={`badge bg-${color}-subtle ${textClass} border border-${color}-subtle px-3 py-2 rounded-pill`}
-                            style={{ fontSize: "0.75rem" }}
-                          >
-                            {order.status}
-                          </span>
-                        </td>
-                        <td className="text-end pe-4">
-                          <button className="btn btn-sm btn-light border">
-                            Details
-                          </button>
-                        </td>
-                      </tr>
-                    );
-                  })
-                ) : (
-                  <tr>
-                    <td colSpan="6" className="text-center py-4 text-muted">
-                      No orders found.
-                    </td>
-                  </tr>
-                )}
-              </tbody>
-            </table>
-          </div>
-        </section>
-      </main>
-    </>
+        )}
+      </section>
+    </Col>
   );
 };
 

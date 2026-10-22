@@ -54,14 +54,17 @@ const Header = () => {
   };
 
   return (
-    <nav className="navbar navbar-expand-lg navbar-light bg-white shadow-sm sticky-top">
+    <nav
+      className="navbar navbar-expand-lg bg-dark border-bottom border-secondary sticky-top py-3"
+      data-bs-theme="dark"
+    >
       <div className="container">
-        <Link className="navbar-brand d-flex align-items-center" to="/">
-          <i className="bi bi-bag-heart-fill text-primary me-2"></i>
-          EasyShop
+        <Link className="navbar-brand d-flex align-items-center fw-bold" to="/">
+          <i className="bi bi-bag-heart-fill text-warning me-2"></i>
+          Easy<span className="text-warning">Shop</span>
         </Link>
         <button
-          className="navbar-toggler"
+          className="navbar-toggler border-0 shadow-none"
           type="button"
           data-bs-toggle="collapse"
           data-bs-target="#navbarNav"
@@ -72,43 +75,51 @@ const Header = () => {
           <span className="navbar-toggler-icon"></span>
         </button>
         <div className="collapse navbar-collapse" id="navbarNav">
-          <ul className="navbar-nav ms-auto align-items-center">
+          <ul className="navbar-nav ms-auto align-items-lg-center pt-3 pt-lg-0">
             <li className="nav-item">
               <Link
                 className={`nav-link ${
-                  isActive("/") ? "text-primary fw-semibold" : ""
+                  isActive("/") ? "text-warning fw-semibold" : ""
                 }`}
                 to="/"
               >
                 Home
               </Link>
             </li>
-            <li className="nav-item position-relative">
+            <li className="nav-item">
               <Link
-                className={`nav-link mx-2 ${
-                  isActive("/cart") ? "text-primary fw-semibold" : ""
+                className={`nav-link mx-lg-2 ${
+                  isActive("/cart") ? "text-warning fw-semibold" : ""
                 }`}
                 to="/cart"
               >
-                <i className="bi bi-cart3"></i> Cart
-                {state?.itemCount > 0 && (
-                  <span className="badge bg-danger position-absolute top-0 start-100 translate-middle">
-                    {state?.itemCount}
-                  </span>
-                )}
+                <span className="position-relative d-inline-block">
+                  <i className="bi bi-cart3"></i> Cart
+                  {state?.itemCount > 0 && (
+                    <span className="badge rounded-pill bg-warning text-dark position-absolute top-0 start-100 translate-middle">
+                      {state?.itemCount}
+                    </span>
+                  )}
+                </span>
               </Link>
             </li>
             {!accessToken ? (
-              <li className="nav-item d-flex gap-2 ms-3">
-                <Link className="btn btn-outline-primary btn-sm" to="/login">
+              <li className="nav-item d-flex gap-2 ms-lg-3 mt-3 mt-lg-0">
+                <Link
+                  className="btn btn-outline-light btn-sm rounded-pill px-3"
+                  to="/login"
+                >
                   Login
                 </Link>
-                <Link className="btn btn-primary btn-sm" to="/signup">
+                <Link
+                  className="btn btn-warning btn-sm rounded-pill px-3 fw-semibold"
+                  to="/signup"
+                >
                   Sign Up
                 </Link>
               </li>
             ) : (
-              <li className="nav-item dropdown ms-3">
+              <li className="nav-item dropdown ms-lg-3">
                 <a
                   className="nav-link dropdown-toggle"
                   href="#"
@@ -118,7 +129,7 @@ const Header = () => {
                   <User size={18} className="me-1" />
                   {profile?.username}
                 </a>
-                <ul className="dropdown-menu">
+                <ul className="dropdown-menu dropdown-menu-end border-0 shadow-lg rounded-4">
                   <li>
                     <Link className="dropdown-item" to="/dashboard">
                       Dashboard
