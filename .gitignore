@@ -131,7 +131,11 @@ celerybeat.pid
 *.sage.py
 
 # Environments
-.env
+# Ignore backend environment file
+/backend/.env
+
+# Allow frontend environment file
+!/frontend/.env
 .venv
 env/
 venv/
