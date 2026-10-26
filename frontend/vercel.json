@@ -1,13 +1,12 @@
 {
-  "$schema": "https://openapi.vercel.sh/vercel.json",
-  "routes": [
+  "rewrites": [
     {
-      "src": "^/api/v1/(.*)$",
-      "dest": "http://54.253.197.52:8000/api/v1/$1"
+      "source": "/api/v1/:path*",
+      "destination": "http://54.253.197.52:8000/api/v1/:path*"
     },
     {
-      "src": "^/(.*)$",
-      "dest": "/index.html"
+      "source": "/(.*)",
+      "destination": "/index.html"
     }
   ]
 }
