@@ -16,6 +16,8 @@ import Register from "./pages/Register";
 import Header from "./components/Navbar";
 import Footer from "./components/Footer";
 
+
+
 function App() {
   return (
     <>
@@ -37,7 +39,7 @@ function App() {
           </Route>
           <Route path="/order/success/:id" element={<OrderSuccess />} />
         </Routes>
-        <Footer/>
+        <Footer />
       </Router>
     </>
   );
